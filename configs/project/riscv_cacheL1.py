@@ -26,9 +26,9 @@ default_binary = os.path.join(
 )
 
 SimpleOpts.add_option("binary", nargs="?", default=default_binary)
-# SimpleOpts.add_option("--input_file", nargs="?", default=None, help="Input file to replace the keyboard")
-# SimpleOpts.add_option("--output_file", nargs="?", default=None, help="Output file")
-# SimpleOpts.add_option("file_args", nargs=argparse.REMAINDER, default=None)
+SimpleOpts.add_option("--input_file", nargs="?", default=None, help="Input file to replace the keyboard")
+SimpleOpts.add_option("--output_file", nargs="?", default=None, help="Output file")
+SimpleOpts.add_option("file_args", nargs=argparse.REMAINDER, default=None)
 args = SimpleOpts.parse_args()
 
 # Define the system
@@ -40,7 +40,6 @@ system.mem_mode = "timing"  # Use timing accesses
 system.mem_ranges = [AddrRange("512MiB")]  # Create an address range
 
 # Set the CPU
-# system.cpu = RiscvTimingSimpleCPU()
 system.cpu = RiscvO3CPU()
 system.cpu.ArchISA.riscv_type = "RV32"
 
@@ -77,21 +76,19 @@ system.workload = SEWorkload.init_compatible(args.binary)
 process = Process()
 
 # Handle the arguments
-# if args.file_args:
-#     process.cmd = [args.binary] + args.file_args
-# else:
-#     process.cmd = [args.binary]
+if args.file_args:
+    process.cmd = [args.binary] + args.file_args
+else:
+    process.cmd = [args.binary]
 
-# if args.input_file:
-#     process.input = args.input_file
+if args.input_file:
+    process.input = args.input_file
 
-# if args.output_file:
-#     output_dir = os.path.dirname(args.output_file)
-#     if not os.path.exists(output_dir):
-#         os.makedirs(output_dir)
-#     process.output = args.output_file
-
-process.cmd = [args.binary]
+if args.output_file:
+    output_dir = os.path.dirname(args.output_file)
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+    process.output = args.output_file
 
 # Set the cpu to use the process as its workload and create thread contexts
 system.cpu.workload = process
