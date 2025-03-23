@@ -85,6 +85,7 @@ CPU::CPU(const BaseO3CPUParams &params)
       rename(this, params),
       iew(this, params),
       commit(this, params),
+      monitor(),
 
       regFile(params.numPhysIntRegs,
               params.numPhysFloatRegs,
@@ -263,6 +264,9 @@ CPU::CPU(const BaseO3CPUParams &params)
     // Setup the ROB for whichever stages need it.
     commit.setROB(&rob);
 
+    // Setup the Monitore object
+    monitor.setROB(&rob);
+
     lastActivatedCycle = 0;
 
     DPRINTF(O3CPU, "Creating O3CPU object.\n");
@@ -381,6 +385,8 @@ CPU::tick()
     iew.tick();
 
     commit.tick();
+
+    monitor.tick();
 
     // Now advance the time buffers
     timeBuffer.advance();

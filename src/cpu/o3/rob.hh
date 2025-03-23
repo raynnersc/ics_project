@@ -292,6 +292,10 @@ class ROB
     unsigned squashWidth;
 
   public:
+    /** Return the instruction list */
+    const std::list<DynInstPtr> &getInstList(ThreadID tid) const
+    { return instList[tid]; }
+
     /** Iterator pointing to the instruction which is the last instruction
      *  in the ROB.  This may at times be invalid (ie when the ROB is empty),
      *  however it should never be incorrect.

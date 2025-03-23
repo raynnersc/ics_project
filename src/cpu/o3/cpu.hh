@@ -70,6 +70,8 @@
 #include "params/BaseO3CPU.hh"
 #include "sim/process.hh"
 
+#include "cpu/o3/monitor.hh"
+
 namespace gem5
 {
 
@@ -415,6 +417,9 @@ class CPU : public BaseCPU
 
     /** The commit stage. */
     Commit commit;
+
+    /** The monitor for debugging */
+    Monitor monitor;
 
     /** The register file. */
     PhysRegFile regFile;
